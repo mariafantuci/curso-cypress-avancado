@@ -148,25 +148,21 @@ describe('Hacker Stories', () => {
 
       it.only('shows a max of 5 buttons for the last searched terms', () => {
         const faker = require('faker')
-        const requestSearch = (searchTerm) =>{ 
-          cy.intercept({
+        cy.intercept({
             method: 'GET',
             pathname: '**/search',
             query: {
-              query: `${searchTerm}`,
+              query: `**`,
               page: '0'
             }
-          }).as('getNewSearchStories')        
-        }
+          }).as('getRandomStories')        
+        
         Cypress._.times(6, () => {
-          const term = faker.random.word()
-          requestSearch(term)
           cy.get('#search')
             .clear()
-            .type(`${term}{enter}`)
+            .type(`${faker.random.word()}{enter}`)
+            cy.wait('@getRandomStories')
         })
-
-        cy.wait('@getNewSearchStories')
 
         cy.get('.last-searches button')
           .should('have.length', 5)
