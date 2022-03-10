@@ -27,7 +27,7 @@ describe('Hacker Stories', () => {
     // TODO: Find a way to test it out.
     it.skip('shows the right data for all rendered stories', () => {})
 
-    it.only('shows 20 stories, then the next 20 after clicking "More"', () => {
+    it('shows 20 stories, then the next 20 after clicking "More"', () => {
       cy.intercept({
         method: 'GET',
         pathname: '**/search',
@@ -95,7 +95,7 @@ describe('Hacker Stories', () => {
         .clear()
     })
 
-    it.only('types and hits ENTER', () => {
+    it('types and hits ENTER', () => {
       cy.get('#search')
         .type(`${newTerm}{enter}`)
 
@@ -109,13 +109,13 @@ describe('Hacker Stories', () => {
         .should('be.visible')
     })
 
-    it('types and clicks the submit button', () => {
+    it.only('types and clicks the submit button', () => {
       cy.get('#search')
         .type(newTerm)
       cy.contains('Submit')
         .click()
 
-      cy.assertLoadingIsShownAndHidden()
+      cy.wait('@getNewStories')
 
       cy.get('.item').should('have.length', 20)
       cy.get('.item')
