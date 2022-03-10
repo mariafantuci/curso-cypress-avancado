@@ -125,6 +125,18 @@ describe('Hacker Stories', () => {
         .should('be.visible')
     })
 
+    it.only('types and submits the form directly', () => {
+      cy.get('#search')
+      .type(`${newTerm}{enter}`)
+      cy.get('form input[type="text"]')
+        .should('be.visible')
+        .clear()
+        .type('cypress')
+      cy.get('form').submit()
+    
+      // Assertion here
+    })
+
     context('Last searches', () => {
       it('searches via the last searched term', () => {
         cy.get('#search')
@@ -146,7 +158,7 @@ describe('Hacker Stories', () => {
           .should('be.visible')
       })
 
-      it.only('shows a max of 5 buttons for the last searched terms', () => {
+      it('shows a max of 5 buttons for the last searched terms', () => {
         const faker = require('faker')
         cy.intercept({
             method: 'GET',
