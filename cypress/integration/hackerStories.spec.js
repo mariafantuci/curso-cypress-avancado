@@ -83,15 +83,23 @@ describe('Hacker Stories', () => {
     const newTerm = 'Cypress'
 
     beforeEach(() => {
+      cy.intercept({
+        method: 'GET',
+        pathname: '**/search',
+        query: {
+          query: `${newTerm}`,
+          page: '0'
+        }
+      }).as('getNewStories')
       cy.get('#search')
         .clear()
     })
 
-    it('types and hits ENTER', () => {
+    it.only('types and hits ENTER', () => {
       cy.get('#search')
         .type(`${newTerm}{enter}`)
 
-      cy.assertLoadingIsShownAndHidden()
+      cy.wait('@getNewStories')
 
       cy.get('.item').should('have.length', 20)
       cy.get('.item')
